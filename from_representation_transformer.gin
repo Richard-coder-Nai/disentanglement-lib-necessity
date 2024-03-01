@@ -1,0 +1,90 @@
+# Parameters for abstract_reasoning:
+# ==============================================================================
+abstract_reasoning.batch_size = 32
+abstract_reasoning.eval_steps_per_iteration = 50
+abstract_reasoning.model = @TwoStageModel()
+abstract_reasoning.name = ''
+abstract_reasoning.num_iterations = 100
+abstract_reasoning.random_seed = 0
+abstract_reasoning.training_steps_per_iteration = 100
+
+# Parameters for activation:
+# ==============================================================================
+# None.
+
+# Parameters for AdamWeightDecayOptimizer:
+# ==============================================================================
+AdamWeightDecayOptimizer.beta_1 = 0.9
+AdamWeightDecayOptimizer.beta_2 = 0.999
+AdamWeightDecayOptimizer.epsilon = 1e-06
+AdamWeightDecayOptimizer.exclude_from_weight_decay = \
+    ['LayerNorm', 'layer_norm', 'bias']
+AdamWeightDecayOptimizer.learning_rate = @lr/CosineScheduler()
+AdamWeightDecayOptimizer.name = 'AdamWeightDecayOptimizer'
+AdamWeightDecayOptimizer.weight_decay_rate = @wd/CosineScheduler()
+
+# Parameters for lr/CosineScheduler:
+# ==============================================================================
+lr/CosineScheduler.base_value = 0.0005
+lr/CosineScheduler.epochs = 100
+lr/CosineScheduler.final_value = 5e-06
+lr/CosineScheduler.niter_per_ep = 100
+lr/CosineScheduler.start_warmup_value = 0
+lr/CosineScheduler.warmup_epochs = 5
+
+# Parameters for wd/CosineScheduler:
+# ==============================================================================
+wd/CosineScheduler.base_value = 0.0001
+wd/CosineScheduler.epochs = 100
+wd/CosineScheduler.final_value = 1e-06
+wd/CosineScheduler.niter_per_ep = 100
+wd/CosineScheduler.start_warmup_value = 0
+wd/CosineScheduler.warmup_epochs = 5
+
+# Parameters for dataset:
+# ==============================================================================
+dataset.name = 'shapes3d'
+
+# Parameters for global_stat:
+# ==============================================================================
+global_stat.by = 'both+l2'
+
+# Parameters for HubEmbedding:
+# ==============================================================================
+HubEmbedding.hub_path = \
+    '3dshapes_byol_checkpoints/3dshapes_bz512_dim64_gn_crop1.0_grayp0.5_jitp0.8_jit0.6_lr3e-2_seed0/tfhub'
+HubEmbedding.name = 'HubEmbedding'
+HubEmbedding.scaler = @global_stat
+
+# Parameters for kernel_initializer:
+# ==============================================================================
+kernel_initializer.kernel_initializer = 'lecun_normal'
+
+# Parameters for OptimizedTransformer:
+# ==============================================================================
+OptimizedTransformer.d_model = 256
+OptimizedTransformer.d_qkv = 32
+OptimizedTransformer.depth = 2
+OptimizedTransformer.drop_path = 0
+OptimizedTransformer.dropout = 0.9
+OptimizedTransformer.dropout_in_last_graph_layer = 0.25
+OptimizedTransformer.graph_mlp = [256, 256]
+OptimizedTransformer.name = 'OptimizedTransformer'
+OptimizedTransformer.num_heads = 8
+
+# Parameters for pgm:
+# ==============================================================================
+pgm.pgm_type = 'hard_mixed'
+
+# Parameters for transformer_block:
+# ==============================================================================
+transformer_block.ff_dim = 32
+
+# Parameters for TwoStageModel:
+# ==============================================================================
+TwoStageModel.concat_noise_dim = None
+TwoStageModel.embedding_model_class = @HubEmbedding
+TwoStageModel.optimizer_fn = @AdamWeightDecayOptimizer
+TwoStageModel.reasoning_model_class = @OptimizedTransformer
+TwoStageModel.repeat_dim = None
+TwoStageModel.rotate_embedding = 0
